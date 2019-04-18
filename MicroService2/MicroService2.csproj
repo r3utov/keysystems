@@ -119,7 +119,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55806</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:55806/</IISUrl>
+          <IISUrl>http://localhost:9002</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:9002</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
