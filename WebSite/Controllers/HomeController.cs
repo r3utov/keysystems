@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using CustomFormatters;
+using WebSite.Models;
 
 namespace WebSite.Controllers
 {
@@ -25,10 +29,67 @@ namespace WebSite.Controllers
 			}
 		}
 
+
+		/// <summary>
+		/// Включена ли проверка значения введенного текста на стороне веб-сайта
+		/// (перед передачей на сервис)
+		/// </summary>
+		public bool ServerSideStringValidation { get; set; } = true;
+
 		public ActionResult Index()
 		{
 			return View();
 		}
 
+
+		/// <summary>
+		/// Анализирует данные, полученные из формы, и посылает запрос на выбранный сервис
+		/// </summary>
+		[HttpPost]
+		public ActionResult ProcessText(UserInputViewModel viewModel)
+		{
+			/// Проверка значения
+			if (ServerSideStringValidation == true) {
+				if (string.IsNullOrEmpty(viewModel.Word) == true) {
+					ModelState.AddModelError(nameof(viewModel.Word), "Задана пустая строка");
+					return View("Index", viewModel);
+				}
+			}
+
+			using (var httpClient = new HttpClient()) {
+
+				/// Выбор сервиса по заданному условию
+				string selectedService;
+				if (viewModel.IsActionChecked == true) {
+					selectedService = MicroService2Address;
+				} else {
+					selectedService = MicroService1Address;
+				}
+
+				httpClient.BaseAddress = new Uri(selectedService);
+
+				var responseTask = httpClient.PostAsync("convert/",
+					new StringContent(
+						content: viewModel.Word ?? string.Empty,
+						encoding: Encoding.UTF8,
+						mediaType: "text/plain"
+					));
+
+				responseTask.Wait();
+				var result = responseTask.Result;
+
+				var readTask = result.Content.ReadAsAsync<string>(new[] { new PlainTextMediaTypeFormatter(Encoding.UTF8) });
+				readTask.Wait();
+
+				if (result.IsSuccessStatusCode == true) {
+					ViewBag.Result = readTask.Result;
+				} else {
+					ViewBag.Result = $"Ошибка при запросе на сервис [{selectedService}]: {Environment.NewLine} {result.StatusCode.ToString()} ({readTask.Result})";
+				}
+			}
+
+			return View();
+
+		}
 	}
 }
