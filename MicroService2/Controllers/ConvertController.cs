@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace MicroService2.Controllers
 {
-	public class ConvertController
+	public class ConvertController : ApiController
 	{
 
 		/// -------------------------------------------------------------- 

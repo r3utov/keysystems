@@ -14,7 +14,8 @@ namespace MicroService2
 			// Конфигурация и службы веб-API
 
 			// Маршруты веб-API
-			// Маршруты веб-API
+			config.MapHttpAttributeRoutes();
+
 			config.Routes.MapHttpRoute(
 				name: "PostRequests",
 				routeTemplate: "api/{controller}"
