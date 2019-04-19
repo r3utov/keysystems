@@ -1,12 +1,58 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    padding-top: 0px;
+    margin: 0;
 }
+
+.div {
+    vertical-align: middle;
+    display: block;
+    width: 100%;
+}
+
+.label {
+    display: inline-block;
+    float: none;
+    width: 110px;
+    padding: 0;
+    margin: 5px 0 0;
+    text-align: left;
+}
+
+.field-validation-error {
+    color: red;
+}
+
+.input-validation-error {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid red;
+}
+
+.input {
+    display: inline-block;
+    float: none;
+    width: auto;
+    margin: 10px 0 0 0;
+    padding: 5px 5px;
+}
+
+.button {
+    background-color: #0088ff;
+    border: none;
+    color: white;
+    margin: 10px 0 0 0;
+    padding: 10px 10px 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+}
+
+
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
