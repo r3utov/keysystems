@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web.Http;
+using CustomFormatters;
 
 namespace MicroService2
 {
@@ -9,16 +11,16 @@ namespace MicroService2
     {
         public static void Register(HttpConfiguration config)
         {
-            // Конфигурация и службы веб-API
+			// Конфигурация и службы веб-API
 
-            // Маршруты веб-API
-            config.MapHttpAttributeRoutes();
+			// Маршруты веб-API
+			// Маршруты веб-API
+			config.Routes.MapHttpRoute(
+				name: "PostRequests",
+				routeTemplate: "api/{controller}"
+			);
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-        }
+			config.Formatters.Add(new PlainTextMediaTypeFormatter(Encoding.UTF8));
+		}
     }
 }
