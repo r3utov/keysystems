@@ -4,10 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSite", "WebSite\WebSite.csproj", "{55F830D5-5ACF-42A9-AA08-B8EF6FAEF17F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{83F6806B-EF87-44CF-BCE6-1C3114849F93} = {83F6806B-EF87-44CF-BCE6-1C3114849F93}
-		{963519DF-2D02-4FEB-A910-2D2DF316E6DD} = {963519DF-2D02-4FEB-A910-2D2DF316E6DD}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroService1", "MicroService1\MicroService1.csproj", "{963519DF-2D02-4FEB-A910-2D2DF316E6DD}"
 EndProject
