@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web;
@@ -55,9 +56,7 @@ namespace WebSite.Controllers
 					return View("Index", viewModel);
 				}
 			}
-
-			using (var httpClient = new HttpClient()) {
-
+				using (var httpClient = new HttpClient()) {
 				/// Выбор сервиса по заданному условию
 				string selectedService;
 				if (viewModel.IsActionChecked == true) {
@@ -66,30 +65,43 @@ namespace WebSite.Controllers
 					selectedService = MicroService1Address;
 				}
 
-				httpClient.BaseAddress = new Uri(selectedService);
+				try {
 
-				var responseTask = httpClient.PostAsync("convert/",
-					new StringContent(
-						content: viewModel.Word ?? string.Empty,
-						encoding: Encoding.UTF8,
-						mediaType: "text/plain"
-					));
+					httpClient.BaseAddress = new Uri(selectedService);
 
-				responseTask.Wait();
-				var result = responseTask.Result;
+					var responseTask = httpClient.PostAsync("convert/",
+						new StringContent(
+							content: viewModel.Word ?? string.Empty,
+							encoding: Encoding.UTF8,
+							mediaType: "text/plain"
+						));
 
-				var readTask = result.Content.ReadAsAsync<string>(new[] { new PlainTextMediaTypeFormatter(Encoding.UTF8) });
-				readTask.Wait();
+					responseTask.Wait();
+					var result = responseTask.Result;
 
-				if (result.IsSuccessStatusCode == true) {
-					ViewBag.Result = readTask.Result;
-				} else {
-					ViewBag.Result = $"Ошибка при запросе на сервис [{selectedService}]: {Environment.NewLine} {result.StatusCode.ToString()} ({readTask.Result})";
+					var readTask = result.Content.ReadAsAsync<string>(new[] { new PlainTextMediaTypeFormatter(Encoding.UTF8) });
+					readTask.Wait();
+
+					if (result.IsSuccessStatusCode == true) {
+						ViewBag.Result = readTask.Result;
+					} else {
+						ViewBag.Result = FormatErrorString(selectedService, $"{result.StatusCode.ToString()} ({readTask.Result})");
+					}
+				} catch (Exception ex) {
+					/// Поиск самого "вложенного" исключения
+					while (ex.InnerException != null) {
+						ex = ex.InnerException;
+					}
+					ViewBag.Result = FormatErrorString(selectedService, ex.Message);
 				}
 			}
-
 			return View();
 
+		}
+
+		private string FormatErrorString(string service, string errorMessage)
+		{
+			return $"Ошибка при запросе на сервис [{service}]: {Environment.NewLine} {errorMessage}";
 		}
 	}
 }
